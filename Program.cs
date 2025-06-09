@@ -12,12 +12,10 @@ namespace Kursach
         static List<Employee> employees = new List<Employee>();
         static List<Area> areas = new List<Area>();
         static List<PatientCard> patientCards = new List<PatientCard>();
-        static List<Polyclinic> polyclinics = new List<Polyclinic>();
         static string doctorFile = "doctors.txt";
         static string employeeFile = "employees.txt";
         static string areaFile = "areas.txt";
         static string patientCardFile = "patientCards.txt";
-        static string polyclinicFile = "polyclinics.txt";
 
         static void Main(string[] args)
         {
@@ -120,9 +118,9 @@ namespace Kursach
                         try
                         {
                             Console.Clear();
-                            AddPatientCard();
+                            RegisterPatient();
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Карточка пациента успешно добавлена");
+                            Console.WriteLine("Пациент успешно зарегистрирован");
                             Console.ResetColor();
                             Console.Write("Хотите продолжить? (Да/Нет): ");
                             string answer = Console.ReadLine();
@@ -138,9 +136,30 @@ namespace Kursach
                         }
                         break;
                     case '6':
-                        flag = false;
+                        try
+                        {
+                            Console.Clear();
+                            AddVisit();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Посещение успешно добавлено");
+                            Console.ResetColor();
+                            Console.Write("Хотите продолжить? (Да/Нет): ");
+                            string answer = Console.ReadLine();
+                            if (answer.ToLower() == "нет")
+                                flag = false;
+                        }
+                        catch
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Ошибка, попробуйте еще раз");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                        }
                         break;
                     case '7':
+                        flag = false;
+                        break;
+                    case '8':
                         SaveData();
                         return;
                     default:
@@ -151,236 +170,243 @@ namespace Kursach
                         Console.ReadKey();
                         break;
                 }
-            }
 
-            // Главное меню
-            bool flagMain = true;
-            while (flagMain)
-            {
-                Console.Clear();
-                ShowMainMenu();
-                switch (Console.ReadKey(true).KeyChar)
+                // Главное меню
+                if (!flag)
                 {
-                    case '1':
-                        bool flagDoctors = true;
-                        while (flagDoctors)
-                        {
-                            Console.Clear();
-                            ShowDoctorsMenu();
-                            switch (Console.ReadKey(true).KeyChar)
-                            {
-                                case '1':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        ShowAllDoctors();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Информация о врачах выведена");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagDoctors = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '2':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        EditDoctor();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Врач успешно отредактирован");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagDoctors = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '3':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        RemoveDoctor();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Врач успешно удален");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagDoctors = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '4':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        ShowPatientsByDoctor();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Список пациентов выведен");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagDoctors = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '5':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        ShowDoctorScheduleBySpecialty();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Расписание выведено");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagDoctors = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '6':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        ShowDoctorPatientCount();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Статистика выведена");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagDoctors = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '7':
-                                    flagDoctors = false;
-                                    break;
-                                default:
-                                    Console.Clear();
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine("Ошибка, попробуйте еще раз");
-                                    Console.ResetColor();
-                                    Console.ReadKey();
-                                    break;
-                            }
-                        }
-                        break;
-                    case '2':
-                        bool flagQueries = true;
-                        while (flagQueries)
-                        {
-                            Console.Clear();
-                            ShowQueriesMenu();
-                            switch (Console.ReadKey(true).KeyChar)
-                            {
-                                case '1':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        ShowNursesByArea();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Информация о медсестрах выведена");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagQueries = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '2':
-                                    try
-                                    {
-                                        Console.Clear();
-                                        ShowPatientDetails();
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Информация о пациенте выведена");
-                                        Console.ResetColor();
-                                        Console.Write("Хотите продолжить? (Да/Нет): ");
-                                        string answer = Console.ReadLine();
-                                        if (answer.ToLower() == "нет")
-                                            flagQueries = false;
-                                    }
-                                    catch
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                                        Console.ResetColor();
-                                        Console.ReadKey();
-                                    }
-                                    break;
-                                case '3':
-                                    flagQueries = false;
-                                    break;
-                                default:
-                                    Console.Clear();
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine("Ошибка, попробуйте еще раз");
-                                    Console.ResetColor();
-                                    Console.ReadKey();
-                                    break;
-                            }
-                        }
-                        break;
-                    case '3':
-                        SaveData();
-                        return;
-                    default:
+                    bool flagMain = true;
+                    while (flagMain)
+                    {
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Ошибка, попробуйте еще раз");
-                        Console.ResetColor();
-                        Console.ReadKey();
-                        break;
+                        ShowMainMenu();
+                        switch (Console.ReadKey(true).KeyChar)
+                        {
+                            case '1':
+                                bool flagDoctors = true;
+                                while (flagDoctors)
+                                {
+                                    Console.Clear();
+                                    ShowDoctorsMenu();
+                                    switch (Console.ReadKey(true).KeyChar)
+                                    {
+                                        case '1':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                ShowAllDoctors();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Информация о врачах выведена");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagDoctors = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '2':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                EditDoctor();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Врач успешно отредактирован");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagDoctors = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '3':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                RemoveDoctor();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Врач успешно удален");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagDoctors = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '4':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                ShowPatientsByDoctor();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Список пациентов выведен");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagDoctors = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '5':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                ShowDoctorScheduleBySpecialty();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Расписание выведено");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagDoctors = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '6':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                ShowDoctorPatientCount();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Статистика выведена");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagDoctors = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '7':
+                                            flagDoctors = false;
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.WriteLine("Ошибка, попробуйте еще раз");
+                                            Console.ResetColor();
+                                            Console.ReadKey();
+                                            break;
+                                    }
+                                }
+                                break;
+                            case '2':
+                                bool flagQueries = true;
+                                while (flagQueries)
+                                {
+                                    Console.Clear();
+                                    ShowQueriesMenu();
+                                    switch (Console.ReadKey(true).KeyChar)
+                                    {
+                                        case '1':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                ShowNursesByArea();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Информация о медсестрах выведена");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagQueries = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '2':
+                                            try
+                                            {
+                                                Console.Clear();
+                                                ShowPatientDetails();
+                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                Console.WriteLine("Информация о пациенте выведена");
+                                                Console.ResetColor();
+                                                Console.Write("Хотите продолжить? (Да/Нет): ");
+                                                string answer = Console.ReadLine();
+                                                if (answer.ToLower() == "нет")
+                                                    flagQueries = false;
+                                            }
+                                            catch
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                                Console.ResetColor();
+                                                Console.ReadKey();
+                                            }
+                                            break;
+                                        case '3':
+                                            flagQueries = false;
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.WriteLine("Ошибка, попробуйте еще раз");
+                                            Console.ResetColor();
+                                            Console.ReadKey();
+                                            break;
+                                    }
+                                }
+                                break;
+                            case '3':
+                                SaveData();
+                                return;
+                            case '4':
+                                flag = true;
+                                flagMain = false;
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Ошибка, попробуйте еще раз");
+                                Console.ResetColor();
+                                Console.ReadKey();
+                                break;
+                        }
+                    }
                 }
             }
         }
@@ -395,9 +421,10 @@ namespace Kursach
             Console.WriteLine("[2] Добавление врача");
             Console.WriteLine("[3] Добавление сотрудника");
             Console.WriteLine("[4] Добавление участка");
-            Console.WriteLine("[5] Добавление карточки пациента");
-            Console.WriteLine("[6] Выход из первого меню");
-            Console.WriteLine("[7] Выход из программы для сохранения данных");
+            Console.WriteLine("[5] Регистрация пациента");
+            Console.WriteLine("[6] Добавление посещения");
+            Console.WriteLine("[7] Выход из первого меню");
+            Console.WriteLine("[8] Выход из программы для сохранения данных");
             Console.ResetColor();
         }
 
@@ -410,6 +437,7 @@ namespace Kursach
             Console.WriteLine("[1] Врачи");
             Console.WriteLine("[2] Запросы");
             Console.WriteLine("[3] Выход из программы");
+            Console.WriteLine("[4] Вернуться в первое меню");
             Console.ResetColor();
         }
 
@@ -438,16 +466,21 @@ namespace Kursach
         static void AddDoctor()
         {
             Console.WriteLine("=== ДОБАВЛЕНИЕ ВРАЧА ===");
-            Doctor d = new Doctor();
+            Doctor d = new Doctor { ID = doctors.Count + 1 };
             Console.Write("ФИО: ");
-            d.Name = Console.ReadLine();
-            Console.Write("Специальность: ");
-            d.Specialty = Console.ReadLine();
+            d.FIO = Console.ReadLine();
+            Console.Write("Специализация: ");
+            d.Specialization = Console.ReadLine();
+            Console.Write("Категория: ");
+            d.Category = Console.ReadLine();
             Console.Write("Стаж (в годах): ");
             if (int.TryParse(Console.ReadLine(), out int experience))
                 d.Experience = experience;
-            else
-                d.Experience = 0;
+            Console.Write("Дата рождения (гггг-мм-дд): ");
+            if (DateTime.TryParse(Console.ReadLine(), out DateTime birthDate))
+                d.BirthDate = birthDate;
+            Console.Write("Номер кабинета: ");
+            d.CabinetNumber = Console.ReadLine();
             d.Schedule = new Schedule();
             Console.WriteLine("Укажите до 3 дней недели для приема (например, Понедельник, Среда): ");
             for (int i = 0; i < 3; i++)
@@ -458,6 +491,19 @@ namespace Kursach
                 if (Enum.TryParse<DayOfWeek>(day, true, out DayOfWeek dayOfWeek))
                     d.Schedule.Days[i] = dayOfWeek;
             }
+            Console.Write("Часы приема (например, 9:00-12:00): ");
+            d.Schedule.Hours = Console.ReadLine();
+            Console.WriteLine("Назначить участки (введите номера через запятую): ");
+            string[] areaNumbers = Console.ReadLine().Split(',');
+            foreach (var num in areaNumbers)
+            {
+                if (int.TryParse(num.Trim(), out int areaNum))
+                {
+                    var area = areas.FirstOrDefault(a => a.Number == areaNum);
+                    if (area != null)
+                        d.Areas.Add(area);
+                }
+            }
             doctors.Add(d);
             SaveData();
         }
@@ -467,14 +513,12 @@ namespace Kursach
             Console.WriteLine("=== ДОБАВЛЕНИЕ СОТРУДНИКА ===");
             Employee e = new Employee();
             Console.Write("ФИО: ");
-            e.Name = Console.ReadLine();
+            e.FIO = Console.ReadLine();
             Console.Write("Должность (например, Медсестра): ");
             e.Position = Console.ReadLine();
             Console.Write("Стаж (в годах): ");
             if (int.TryParse(Console.ReadLine(), out int experience))
                 e.Experience = experience;
-            else
-                e.Experience = 0;
             Console.Write("Номер участка (или Enter, если не применимо): ");
             if (int.TryParse(Console.ReadLine(), out int areaNumber))
                 e.AreaNumber = areaNumber;
@@ -485,27 +529,30 @@ namespace Kursach
         static void AddArea()
         {
             Console.WriteLine("=== ДОБАВЛЕНИЕ УЧАСТКА ===");
-            Area a = new Area();
-            Console.Write("Номер участка: ");
-            if (int.TryParse(Console.ReadLine(), out int number))
-                a.Number = number;
+            Area a = new Area { Number = areas.Count + 1 };
+            Console.Write("Название участка: ");
+            a.Name = Console.ReadLine();
+            Console.Write("Адрес участка: ");
+            a.Address = Console.ReadLine();
             areas.Add(a);
             SaveData();
         }
 
-        static void AddPatientCard()
+        static void RegisterPatient()
         {
-            Console.WriteLine("=== ДОБАВЛЕНИЕ КАРТОЧКИ ПАЦИЕНТА ===");
-            PatientCard p = new PatientCard();
-            Console.Write("ФИО пациента: ");
-            p.Name = Console.ReadLine();
+            Console.WriteLine("=== РЕГИСТРАЦИЯ ПАЦИЕНТА ===");
+            PatientCard p = new PatientCard { Number = patientCards.Count + 1, CreationDate = DateTime.Now };
+            Console.Write("ФИО: ");
+            p.FIO = Console.ReadLine();
             Console.Write("Адрес: ");
             p.Address = Console.ReadLine();
-            Console.Write("Диагноз: ");
-            p.Diagnosis = Console.ReadLine();
-            Console.Write("Дата последнего посещения (гггг-мм-дд): ");
-            if (DateTime.TryParse(Console.ReadLine(), out DateTime lastVisit))
-                p.LastVisit = lastVisit;
+            Console.Write("Пол (М/Ж): ");
+            p.Gender = Console.ReadLine();
+            Console.Write("Возраст: ");
+            if (int.TryParse(Console.ReadLine(), out int age))
+                p.Age = age;
+            Console.Write("Номер страхового полиса: ");
+            p.InsurancePolicyNumber = Console.ReadLine();
             ShowAllDoctors();
             Console.Write("Введите номер врача: ");
             if (int.TryParse(Console.ReadLine(), out int i) && i > 0 && i <= doctors.Count)
@@ -515,6 +562,58 @@ namespace Kursach
             }
             patientCards.Add(p);
             SaveData();
+        }
+
+        static void AddVisit()
+        {
+            Console.WriteLine("=== ДОБАВЛЕНИЕ ПОСЕЩЕНИЯ ===");
+            Console.Write("Введите номер карточки пациента: ");
+            if (int.TryParse(Console.ReadLine(), out int cardNumber))
+            {
+                var patient = patientCards.FirstOrDefault(p => p.Number == cardNumber);
+                if (patient != null)
+                {
+                    Visit v = new Visit();
+                    Console.Write("Дата посещения (гггг-мм-дд): ");
+                    if (DateTime.TryParse(Console.ReadLine(), out DateTime visitDate))
+                        v.Date = visitDate;
+                    Console.Write("Жалобы: ");
+                    v.Complaints = Console.ReadLine();
+                    Console.Write("Предварительный диагноз: ");
+                    v.PreliminaryDiagnosis = Console.ReadLine();
+                    Console.Write("Назначения: ");
+                    v.Prescriptions = Console.ReadLine();
+                    Console.Write("Выписан больничный? (Да/Нет): ");
+                    v.SickLeaveIssued = Console.ReadLine().ToLower() == "да";
+                    if (v.SickLeaveIssued)
+                    {
+                        Console.Write("Срок больничного (дней): ");
+                        if (int.TryParse(Console.ReadLine(), out int duration))
+                            v.SickLeaveDuration = duration;
+                    }
+                    ShowAllDoctors();
+                    Console.Write("Введите номер врача: ");
+                    if (int.TryParse(Console.ReadLine(), out int i) && i > 0 && i <= doctors.Count)
+                    {
+                        v.DoctorName = doctors[i - 1].FIO;
+                        if (patient.Doctor != doctors[i - 1])
+                        {
+                            patient.Doctor?.Patients.Remove(patient);
+                            patient.Doctor = doctors[i - 1];
+                            doctors[i - 1].Patients.Add(patient);
+                        }
+                    }
+                    patient.Visits.Add(v);
+                    SaveData();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Карточка не найдена.");
+                    Console.ResetColor();
+                    Console.ReadKey();
+                }
+            }
         }
 
         static void EditDoctor()
@@ -527,13 +626,22 @@ namespace Kursach
                 Console.WriteLine("=== РЕДАКТИРОВАНИЕ ВРАЧА ===");
                 Console.Write("Новое ФИО (Enter — оставить): ");
                 string input = Console.ReadLine();
-                if (input != "") d.Name = input;
-                Console.Write("Новая специальность: ");
+                if (input != "") d.FIO = input;
+                Console.Write("Новая специализация: ");
                 input = Console.ReadLine();
-                if (input != "") d.Specialty = input;
+                if (input != "") d.Specialization = input;
+                Console.Write("Новая категория: ");
+                input = Console.ReadLine();
+                if (input != "") d.Category = input;
                 Console.Write("Новый стаж: ");
                 input = Console.ReadLine();
                 if (int.TryParse(input, out int exp)) d.Experience = exp;
+                Console.Write("Новая дата рождения (гггг-мм-дд): ");
+                input = Console.ReadLine();
+                if (DateTime.TryParse(input, out DateTime birthDate)) d.BirthDate = birthDate;
+                Console.Write("Новый номер кабинета: ");
+                input = Console.ReadLine();
+                if (input != "") d.CabinetNumber = input;
                 Console.WriteLine("Обновить расписание? (Да/Нет): ");
                 if (Console.ReadLine().ToLower() == "да")
                 {
@@ -546,6 +654,24 @@ namespace Kursach
                         if (string.IsNullOrEmpty(day)) break;
                         if (Enum.TryParse<DayOfWeek>(day, true, out DayOfWeek dayOfWeek))
                             d.Schedule.Days[j] = dayOfWeek;
+                    }
+                    Console.Write("Часы приема: ");
+                    d.Schedule.Hours = Console.ReadLine();
+                }
+                Console.WriteLine("Обновить участки? (Да/Нет): ");
+                if (Console.ReadLine().ToLower() == "да")
+                {
+                    d.Areas.Clear();
+                    Console.WriteLine("Назначить участки (введите номера через запятую): ");
+                    string[] areaNumbers = Console.ReadLine().Split(',');
+                    foreach (var num in areaNumbers)
+                    {
+                        if (int.TryParse(num.Trim(), out int areaNum))
+                        {
+                            var area = areas.FirstOrDefault(a => a.Number == areaNum);
+                            if (area != null)
+                                d.Areas.Add(area);
+                        }
                     }
                 }
                 SaveData();
@@ -585,10 +711,25 @@ namespace Kursach
             if (int.TryParse(Console.ReadLine(), out int i) && i > 0 && i <= doctors.Count)
             {
                 Doctor d = doctors[i - 1];
-                foreach (var patient in patientCards.Where(p => p.Doctor == d))
+                Console.WriteLine("Переназначить участки и пациентов? (Да/Нет): ");
+                if (Console.ReadLine().ToLower() == "да")
                 {
-                    patient.Doctor = null;
+                    ShowAllDoctors();
+                    Console.Write("Введите номер нового врача: ");
+                    if (int.TryParse(Console.ReadLine(), out int newDoctorIndex) && newDoctorIndex > 0 && newDoctorIndex <= doctors.Count && newDoctorIndex != i)
+                    {
+                        Doctor newDoctor = doctors[newDoctorIndex - 1];
+                        foreach (var area in d.Areas)
+                            if (!newDoctor.Areas.Contains(area))
+                                newDoctor.Areas.Add(area);
+                        foreach (var patient in d.Patients)
+                        {
+                            patient.Doctor = newDoctor;
+                            newDoctor.Patients.Add(patient);
+                        }
+                    }
                 }
+                d.Patients.Clear();
                 doctors.RemoveAt(i - 1);
                 SaveData();
             }
@@ -608,12 +749,12 @@ namespace Kursach
             if (int.TryParse(Console.ReadLine(), out int i) && i > 0 && i <= doctors.Count)
             {
                 var doctor = doctors[i - 1];
-                Console.WriteLine($"Пациенты врача {doctor.Name}:");
+                Console.WriteLine($"Пациенты врача {doctor.FIO}:");
                 if (doctor.Patients.Count == 0)
                     Console.WriteLine("Нет пациентов.");
                 else
                     foreach (var patient in doctor.Patients)
-                        Console.WriteLine($"- {patient.Name}");
+                        Console.WriteLine($"- {patient.FIO} (Карточка №{patient.Number})");
             }
             else
             {
@@ -636,7 +777,7 @@ namespace Kursach
                 foreach (var area in areas)
                 {
                     int nurseCount = employees.Count(e => e.Position.ToLower() == "медсестра" && e.AreaNumber == area.Number);
-                    Console.WriteLine($"Участок №{area.Number}: {nurseCount} медсестер");
+                    Console.WriteLine($"Участок №{area.Number} ({area.Name}): {nurseCount} медсестер");
                 }
             }
             Console.ReadKey();
@@ -644,20 +785,21 @@ namespace Kursach
 
         static void ShowDoctorScheduleBySpecialty()
         {
-            Console.Write("Введите специальность: ");
-            string specialty = Console.ReadLine();
-            var matchingDoctors = doctors.Where(d => d.Specialty.Equals(specialty, StringComparison.OrdinalIgnoreCase)).ToList();
+            Console.Write("Введите специализацию: ");
+            string specialization = Console.ReadLine();
+            var matchingDoctors = doctors.Where(d => d.Specialization.Equals(specialization, StringComparison.OrdinalIgnoreCase)).ToList();
             if (matchingDoctors.Count == 0)
             {
-                Console.WriteLine("Врачей с такой специальностью нет.");
+                Console.WriteLine("Врачей с такой специализацией нет.");
             }
             else
             {
-                Console.WriteLine($"Расписание врачей ({specialty}):");
+                Console.WriteLine($"Расписание врачей ({specialization}):");
                 foreach (var doctor in matchingDoctors)
                 {
-                    Console.WriteLine($"\nВрач: {doctor.Name}");
+                    Console.WriteLine($"\nВрач: {doctor.FIO}, Кабинет: {doctor.CabinetNumber}");
                     doctor.Schedule.Print();
+                    Console.WriteLine($"Участки: {string.Join(", ", doctor.Areas.Select(a => $"№{a.Number}"))}");
                 }
             }
             Console.ReadKey();
@@ -666,19 +808,20 @@ namespace Kursach
         static void ShowPatientDetails()
         {
             Console.Write("Введите ФИО пациента: ");
-            string name = Console.ReadLine();
-            var patient = patientCards.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            string fio = Console.ReadLine();
+            var patient = patientCards.FirstOrDefault(p => p.FIO.Equals(fio, StringComparison.OrdinalIgnoreCase));
             if (patient == null)
             {
                 Console.WriteLine("Пациент не найден.");
             }
             else
             {
-                Console.WriteLine($"Пациент: {patient.Name}");
+                var lastVisit = patient.Visits.OrderByDescending(v => v.Date).FirstOrDefault();
+                Console.WriteLine($"Пациент: {patient.FIO}");
                 Console.WriteLine($"Адрес: {patient.Address}");
-                Console.WriteLine($"Дата последнего посещения: {patient.LastVisit:yyyy-MM-dd}");
-                Console.WriteLine($"Диагноз: {patient.Diagnosis}");
-                Console.WriteLine($"Лечащий врач: {(patient.Doctor != null ? patient.Doctor.Name : "Не назначен")}");
+                Console.WriteLine($"Дата последнего посещения: {(lastVisit != null ? lastVisit.Date.ToString("yyyy-MM-dd") : "Нет посещений")}");
+                Console.WriteLine($"Диагноз: {(lastVisit != null ? lastVisit.PreliminaryDiagnosis : "Нет данных")}");
+                Console.WriteLine($"Лечащий врач: {(patient.Doctor != null ? patient.Doctor.FIO : "Не назначен")}");
             }
             Console.ReadKey();
         }
@@ -689,8 +832,10 @@ namespace Kursach
             DateTime lastMonth = DateTime.Now.AddMonths(-1);
             foreach (var doctor in doctors)
             {
-                int patientCount = doctor.Patients.Count(p => p.LastVisit >= lastMonth);
-                Console.WriteLine($"Врач {doctor.Name}: {patientCount} пациентов");
+                int patientCount = patientCards
+                    .SelectMany(p => p.Visits)
+                    .Count(v => v.DoctorName == doctor.FIO && v.Date >= lastMonth);
+                Console.WriteLine($"Врач {doctor.FIO}: {patientCount} пациентов");
             }
             Console.ReadKey();
         }
@@ -702,7 +847,8 @@ namespace Kursach
                 foreach (var doctor in doctors)
                 {
                     string days = string.Join(";", doctor.Schedule.Days.Where(d => d != null).Select(d => d.ToString()));
-                    sw.WriteLine($"{doctor.Name},{doctor.Specialty},{doctor.Experience},{days}");
+                    string areas = string.Join(";", doctor.Areas.Select(a => a.Number));
+                    sw.WriteLine($"{doctor.ID},{doctor.FIO},{doctor.Specialization},{doctor.Category},{doctor.Experience},{doctor.BirthDate:yyyy-MM-dd},{doctor.CabinetNumber},{days},{doctor.Schedule.Hours},{areas}");
                 }
             }
 
@@ -710,7 +856,7 @@ namespace Kursach
             {
                 foreach (var employee in employees)
                 {
-                    sw.WriteLine($"{employee.Name},{employee.Position},{employee.Experience},{employee.AreaNumber}");
+                    sw.WriteLine($"{employee.FIO},{employee.Position},{employee.Experience},{employee.AreaNumber}");
                 }
             }
 
@@ -718,7 +864,7 @@ namespace Kursach
             {
                 foreach (var area in areas)
                 {
-                    sw.WriteLine($"{area.Number}");
+                    sw.WriteLine($"{area.Number},{area.Name},{area.Address}");
                 }
             }
 
@@ -726,32 +872,11 @@ namespace Kursach
             {
                 foreach (var patient in patientCards)
                 {
-                    string doctorName = patient.Doctor != null ? patient.Doctor.Name : "";
-                    sw.WriteLine($"{patient.Name},{patient.Address},{patient.Diagnosis},{patient.LastVisit:yyyy-MM-dd},{doctorName}");
-                }
-            }
-
-            using (StreamWriter sw = new StreamWriter(polyclinicFile))
-            {
-                foreach (var polyclinic in polyclinics)
-                {
-                    sw.WriteLine($"{polyclinic.Number},{polyclinic.Address}");
-                    foreach (var doctor in polyclinic.Doctors)
+                    string doctorFIO = patient.Doctor != null ? patient.Doctor.FIO : "";
+                    sw.WriteLine($"P,{patient.Number},{patient.FIO},{patient.Address},{patient.Gender},{patient.Age},{patient.InsurancePolicyNumber},{patient.CreationDate:yyyy-MM-dd},{doctorFIO}");
+                    foreach (var visit in patient.Visits)
                     {
-                        sw.WriteLine($"  D,{doctor.Name},{doctor.Specialty},{doctor.Experience}");
-                    }
-                    foreach (var employee in polyclinic.Employees)
-                    {
-                        sw.WriteLine($"  E,{employee.Name},{employee.Position},{employee.Experience},{employee.AreaNumber}");
-                    }
-                    foreach (var area in polyclinic.Areas)
-                    {
-                        sw.WriteLine($"  A,{area.Number}");
-                    }
-                    foreach (var patient in polyclinic.PatientCards)
-                    {
-                        string doctorName = patient.Doctor != null ? patient.Doctor.Name : "";
-                        sw.WriteLine($"  P,{patient.Name},{patient.Address},{patient.Diagnosis},{patient.LastVisit:yyyy-MM-dd},{doctorName}");
+                        sw.WriteLine($"V,{patient.Number},{visit.Date:yyyy-MM-dd},{visit.Complaints},{visit.PreliminaryDiagnosis},{visit.Prescriptions},{visit.SickLeaveIssued},{visit.SickLeaveDuration},{visit.DoctorName}");
                     }
                 }
             }
@@ -769,18 +894,35 @@ namespace Kursach
                         var parts = line.Split(',');
                         var doctor = new Doctor
                         {
-                            Name = parts[0],
-                            Specialty = parts[1],
-                            Experience = int.TryParse(parts[2], out int exp) ? exp : 0,
-                            Schedule = new Schedule()
+                            ID = int.Parse(parts[0]),
+                            FIO = parts[1],
+                            Specialization = parts[2],
+                            Category = parts[3],
+                            Experience = int.TryParse(parts[4], out int exp) ? exp : 0,
+                            BirthDate = DateTime.TryParse(parts[5], out DateTime bd) ? bd : DateTime.MinValue,
+                            CabinetNumber = parts[6],
+                            Schedule = new Schedule(),
+                            Areas = new List<Area>(),
+                            Patients = new List<PatientCard>()
                         };
-                        if (parts.Length > 3 && !string.IsNullOrEmpty(parts[3]))
+                        if (parts.Length > 7 && !string.IsNullOrEmpty(parts[7]))
                         {
-                            var days = parts[3].Split(';');
+                            var days = parts[7].Split(';');
                             for (int i = 0; i < days.Length && i < 3; i++)
                             {
                                 if (Enum.TryParse<DayOfWeek>(days[i], true, out DayOfWeek day))
                                     doctor.Schedule.Days[i] = day;
+                            }
+                        }
+                        doctor.Schedule.Hours = parts.Length > 8 ? parts[8] : "";
+                        if (parts.Length > 9 && !string.IsNullOrEmpty(parts[9]))
+                        {
+                            var areaNumbers = parts[9].Split(';').Select(int.Parse);
+                            foreach (var num in areaNumbers)
+                            {
+                                var area = areas.FirstOrDefault(a => a.Number == num);
+                                if (area != null)
+                                    doctor.Areas.Add(area);
                             }
                         }
                         doctors.Add(doctor);
@@ -798,7 +940,7 @@ namespace Kursach
                         var parts = line.Split(',');
                         var employee = new Employee
                         {
-                            Name = parts[0],
+                            FIO = parts[0],
                             Position = parts[1],
                             Experience = int.TryParse(parts[2], out int exp) ? exp : 0,
                             AreaNumber = int.TryParse(parts[3], out int area) ? area : 0
@@ -818,7 +960,9 @@ namespace Kursach
                         var parts = line.Split(',');
                         var area = new Area
                         {
-                            Number = int.Parse(parts[0])
+                            Number = int.Parse(parts[0]),
+                            Name = parts[1],
+                            Address = parts[2]
                         };
                         areas.Add(area);
                     }
@@ -830,76 +974,44 @@ namespace Kursach
                 using (StreamReader sr = new StreamReader(patientCardFile))
                 {
                     string line;
+                    PatientCard currentPatient = null;
                     while ((line = sr.ReadLine()) != null)
                     {
                         var parts = line.Split(',');
-                        var patient = new PatientCard
+                        if (parts[0] == "P")
                         {
-                            Name = parts[0],
-                            Address = parts[1],
-                            Diagnosis = parts[2],
-                            LastVisit = DateTime.TryParse(parts[3], out DateTime date) ? date : DateTime.MinValue
-                        };
-                        if (parts.Length > 4 && !string.IsNullOrEmpty(parts[4]))
-                        {
-                            patient.Doctor = doctors.FirstOrDefault(d => d.Name == parts[4]);
-                            if (patient.Doctor != null)
-                                patient.Doctor.Patients.Add(patient);
-                        }
-                        patientCards.Add(patient);
-                    }
-                }
-            }
-
-            if (File.Exists(polyclinicFile))
-            {
-                using (StreamReader sr = new StreamReader(polyclinicFile))
-                {
-                    string line;
-                    Polyclinic polyclinic = null;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        if (line.StartsWith("  "))
-                        {
-                            var parts = line.Trim().Split(',');
-                            if (parts[0] == "D")
+                            currentPatient = new PatientCard
                             {
-                                var doctor = doctors.FirstOrDefault(d => d.Name == parts[1]);
-                                if (doctor != null)
-                                    polyclinic.Doctors.Add(doctor);
-                            }
-                            else if (parts[0] == "E")
-                            {
-                                var employee = employees.FirstOrDefault(e => e.Name == parts[1]);
-                                if (employee != null)
-                                    polyclinic.Employees.Add(employee);
-                            }
-                            else if (parts[0] == "A")
-                            {
-                                var area = areas.FirstOrDefault(a => a.Number == int.Parse(parts[1]));
-                                if (area != null)
-                                    polyclinic.Areas.Add(area);
-                            }
-                            else if (parts[0] == "P")
-                            {
-                                var patient = patientCards.FirstOrDefault(p => p.Name == parts[1]);
-                                if (patient != null)
-                                    polyclinic.PatientCards.Add(patient);
-                            }
-                        }
-                        else
-                        {
-                            var parts = line.Split(',');
-                            polyclinic = new Polyclinic
-                            {
-                                Number = int.Parse(parts[0]),
-                                Address = parts[1],
-                                Doctors = new List<Doctor>(),
-                                Employees = new List<Employee>(),
-                                Areas = new List<Area>(),
-                                PatientCards = new List<PatientCard>()
+                                Number = int.Parse(parts[1]),
+                                FIO = parts[2],
+                                Address = parts[3],
+                                Gender = parts[4],
+                                Age = int.TryParse(parts[5], out int age) ? age : 0,
+                                InsurancePolicyNumber = parts[6],
+                                CreationDate = DateTime.TryParse(parts[7], out DateTime cd) ? cd : DateTime.Now,
+                                Visits = new List<Visit>()
                             };
-                            polyclinics.Add(polyclinic);
+                            if (parts.Length > 8 && !string.IsNullOrEmpty(parts[8]))
+                            {
+                                currentPatient.Doctor = doctors.FirstOrDefault(d => d.FIO == parts[8]);
+                                if (currentPatient.Doctor != null)
+                                    currentPatient.Doctor.Patients.Add(currentPatient);
+                            }
+                            patientCards.Add(currentPatient);
+                        }
+                        else if (parts[0] == "V" && currentPatient != null)
+                        {
+                            var visit = new Visit
+                            {
+                                Date = DateTime.TryParse(parts[2], out DateTime date) ? date : DateTime.MinValue,
+                                Complaints = parts[3],
+                                PreliminaryDiagnosis = parts[4],
+                                Prescriptions = parts[5],
+                                SickLeaveIssued = bool.Parse(parts[6]),
+                                SickLeaveDuration = int.TryParse(parts[7], out int duration) ? duration : 0,
+                                DoctorName = parts[8]
+                            };
+                            currentPatient.Visits.Add(visit);
                         }
                     }
                 }
